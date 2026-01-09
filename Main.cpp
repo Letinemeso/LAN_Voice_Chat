@@ -2,7 +2,7 @@
 
 int main()
 {
-    Shardis::Application app;
+    LVC::Application app;
 
     app.run();
 
