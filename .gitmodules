@@ -10,3 +10,6 @@
 	path = L_Sound
 	url = https://github.com/Letinemeso/L_Sound.git
 	branch = master
+[submodule "L_Network"]
+	path = L_Network
+	url = https://github.com/Letinemeso/L_Network.git

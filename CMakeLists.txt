@@ -32,6 +32,9 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/L_Variable"
 add_subdirectory("${PROJECT_SOURCE_DIR}/L_Sound"
                  "${PROJECT_BINARY_DIR}/L_Sound"
 )
+add_subdirectory("${PROJECT_SOURCE_DIR}/L_Network"
+                 "${PROJECT_BINARY_DIR}/L_Network"
+)
 
 target_include_directories(LAN_Voice_Chat PUBLIC
                             "${PROJECT_SOURCE_DIR}"
@@ -39,10 +42,12 @@ target_include_directories(LAN_Voice_Chat PUBLIC
                             "${PROJECT_SOURCE_DIR}/L_Utility/include"
                             "${PROJECT_SOURCE_DIR}/L_Variable/include"
                             "${PROJECT_SOURCE_DIR}/L_Sound/include"
+                            "${PROJECT_SOURCE_DIR}/L_Network/include"
 )
 
 
 target_link_libraries(LAN_Voice_Chat PUBLIC
+    L_Network
     L_Sound
     L_Variable
     L_Utility

@@ -21,6 +21,10 @@ namespace Shardis
         void M_register_types();
         void M_on_components_initialized();
 
+    private:
+        void M_test_sound();
+        void M_test_network();
+
     public:
         void run();
 

@@ -9,6 +9,10 @@
 #include <Devices/Input_Device.h>
 #include <Sound.h>
 
+#include <Net_Engine.h>
+#include <Client_Socket.h>
+#include <Server_Socket.h>
+
 using namespace Shardis;
 
 
@@ -17,6 +21,9 @@ Application::Application()
     LV::register_types(m_object_constructor);
 
     LSound::Sound_Engine::instance();
+    LNet::Net_Engine::instance();
+
+    L_CREATE_LOG_LEVEL(LNet::Net_Engine::instance().log_level());
 
     M_register_messages();
     M_register_types();
@@ -47,7 +54,7 @@ void Application::M_on_components_initialized()
 
 
 
-void Application::run()
+void Application::M_test_sound()
 {
     constexpr float Duration = 2.0f;
 
@@ -89,4 +96,29 @@ void Application::run()
     std::this_thread::sleep_for(std::chrono::seconds((unsigned int)Duration));
 
     delete sound_data;
+}
+
+void Application::M_test_network()
+{
+    LNet::Server_Socket server_socket(12345);
+    LNet::Client_Socket client_socket;
+
+    client_socket.connect("127.0.0.1", 12345);
+
+    client_socket.send("ass ass ass bass!");
+
+    LNet::Server_Socket::Message client_message = server_socket.receive();
+    std::cout << "client sent: " << client_message.message << std::endl;
+
+    server_socket.send("ass to you!", client_message.client_address);
+
+    std::string server_response = client_socket.receive();
+    std::cout << "server responded: " << server_response << std::endl;
+}
+
+
+
+void Application::run()
+{
+    M_test_network();
 }
