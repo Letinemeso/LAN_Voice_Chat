@@ -1,0 +1,12 @@
+[submodule "L_Utility"]
+	path = L_Utility
+	url = https://github.com/Letinemeso/L_Utility.git
+	branch = master
+[submodule "L_Variable"]
+	path = L_Variable
+	url = https://github.com/Letinemeso/L_Variable.git
+	branch = master
+[submodule "L_Sound"]
+	path = L_Sound
+	url = https://github.com/Letinemeso/L_Sound.git
+	branch = master
