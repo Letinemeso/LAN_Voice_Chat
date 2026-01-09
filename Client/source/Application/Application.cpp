@@ -75,6 +75,8 @@ void Application::M_test_sound()
     LSound::Sound_Data* sound_data = input_device.extract_capture();
     L_ASSERT(sound_data);
 
+    std::cout << "raw data size = "  << sound_data->raw_data().size << " bytes" << std::endl;
+
     std::cout << "\nplaying capture" << std::endl;
 
 
@@ -120,5 +122,53 @@ void Application::M_test_network()
 
 void Application::run()
 {
-    M_test_network();
+    constexpr unsigned int Max_Sound_Data_Size = 32000;
+    constexpr unsigned int Duration_Milliseconds = 500;
+
+    LSound::Input_Device_Settings device_settings = LSound::Input_Device_Settings::voip_standard((float)Duration_Milliseconds * 0.001f);
+    LSound::Input_Device input_device(device_settings);
+
+    LNet::Client_Socket client_socket(Max_Sound_Data_Size);
+
+    std::string pause_crutch;
+    std::cin >> pause_crutch;
+
+    // client_socket.connect("127.0.0.1", 12345);
+    client_socket.connect("192.168.1.103", 12345);
+
+    unsigned int iterations_expected = 0;
+
+    while(true)
+    {
+        ++iterations_expected;
+        if(iterations_expected > 1000)
+            break;
+
+        std::cout << "\nstarting capture" << std::endl;
+
+        input_device.start_capture();
+        std::this_thread::sleep_for(std::chrono::milliseconds(Duration_Milliseconds));
+        input_device.stop_capture();
+
+        LSound::Sound_Data* sound_data = input_device.extract_capture();
+        L_ASSERT(sound_data);
+
+        std::cout << "raw data size = "  << sound_data->raw_data().size << " bytes" << std::endl;
+
+        std::string raw_sound_data(sound_data->raw_data().size + 1, 0);
+
+        raw_sound_data.reserve(sound_data->raw_data().size + 1);
+        for(unsigned int i = 0; i < sound_data->raw_data().size; ++i)
+            raw_sound_data[i] = sound_data->raw_data().data[i];
+        raw_sound_data[sound_data->raw_data().size] = 0;
+
+        bool sent = client_socket.send(raw_sound_data);
+
+        delete sound_data;
+
+        if(sent)
+            continue;
+
+        std::cout << "error sending package" << std::endl;
+    }
 }
