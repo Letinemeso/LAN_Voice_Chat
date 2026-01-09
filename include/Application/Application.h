@@ -4,7 +4,7 @@
 #include <Variable_Loader.h>
 
 
-namespace Shardis
+namespace LVC
 {
 
     class Application

@@ -13,7 +13,7 @@
 #include <Client_Socket.h>
 #include <Server_Socket.h>
 
-using namespace Shardis;
+using namespace LVC;
 
 
 Application::Application()
@@ -100,8 +100,8 @@ void Application::M_test_sound()
 
 void Application::M_test_network()
 {
-    LNet::Server_Socket server_socket(12345);
-    LNet::Client_Socket client_socket;
+    LNet::Server_Socket server_socket(12345, 1024);
+    LNet::Client_Socket client_socket(1024);
 
     client_socket.connect("127.0.0.1", 12345);
 
