@@ -125,7 +125,7 @@ void Application::run()
     constexpr unsigned int Max_Sound_Data_Size = 32000;
     LNet::Server_Socket server_socket(12345, Max_Sound_Data_Size);
 
-    LSound::Sound_Engine::instance().set_listener_volume_multiplier(50.0f);
+    LSound::Sound_Engine::instance().set_listener_volume_multiplier(2.0f);
 
     LSound::Raw_Sound_Data raw_data;
     raw_data.format = AL_FORMAT_MONO16;

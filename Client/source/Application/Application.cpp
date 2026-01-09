@@ -133,17 +133,11 @@ void Application::run()
     std::string pause_crutch;
     std::cin >> pause_crutch;
 
-    // client_socket.connect("127.0.0.1", 12345);
-    client_socket.connect("192.168.1.103", 12345);
-
-    unsigned int iterations_expected = 0;
+    client_socket.connect("127.0.0.1", 12345);
+    // client_socket.connect("192.168.1.105", 12345);
 
     while(true)
     {
-        ++iterations_expected;
-        if(iterations_expected > 1000)
-            break;
-
         std::cout << "\nstarting capture" << std::endl;
 
         input_device.start_capture();
