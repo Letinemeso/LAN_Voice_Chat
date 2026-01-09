@@ -3,6 +3,8 @@
 #include <Object_Constructor.h>
 #include <Variable_Loader.h>
 
+#include <Network_Manager.h>
+
 
 namespace LVC
 {
@@ -10,7 +12,7 @@ namespace LVC
     class Application
     {
     private:
-        LV::Object_Constructor m_object_constructor;
+        Network_Manager m_network_manager;
 
     public:
         Application();
@@ -20,10 +22,6 @@ namespace LVC
         void M_register_messages();
         void M_register_types();
         void M_on_components_initialized();
-
-    private:
-        void M_test_sound();
-        void M_test_network();
 
     public:
         void run();

@@ -22,10 +22,13 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/L_Network"
                  "${PROJECT_BINARY_DIR}/L_Network"
 )
 
-
-add_subdirectory("${PROJECT_SOURCE_DIR}/Server/"
-                 "${PROJECT_BINARY_DIR}/Server/"
+add_subdirectory("${PROJECT_SOURCE_DIR}/LVC_Common/"
+                 "${PROJECT_BINARY_DIR}/LVC_Common/"
 )
-add_subdirectory("${PROJECT_SOURCE_DIR}/Client/"
-                 "${PROJECT_BINARY_DIR}/Client/"
+
+add_subdirectory("${PROJECT_SOURCE_DIR}/LVC_Server/"
+                 "${PROJECT_BINARY_DIR}/LVC_Server/"
+)
+add_subdirectory("${PROJECT_SOURCE_DIR}/LVC_Client/"
+                 "${PROJECT_BINARY_DIR}/LVC_Client/"
 )

@@ -31,12 +31,14 @@ target_include_directories(LAN_Voice_Chat__Client PUBLIC
                             "${PROJECT_SOURCE_DIR}/../L_Sound/include"
                             "${PROJECT_SOURCE_DIR}/../L_Sound/OpenAL"
                             "${PROJECT_SOURCE_DIR}/../L_Network/include"
+                            "${PROJECT_SOURCE_DIR}/../LVC_Common/include"
 )
 
 
 link_directories(${PROJECT_BINARY_DIR}/../)
 
 target_link_libraries(LAN_Voice_Chat__Client PUBLIC
+    LVC_Common
     L_Network
     L_Sound
     L_Variable
