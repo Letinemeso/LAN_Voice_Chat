@@ -14,6 +14,7 @@
 #include <Server_Socket.h>
 
 #include <Common_Constants.h>
+#include <Package_Header.h>
 
 using namespace LVC;
 
@@ -85,6 +86,11 @@ void Application::run()
         std::cout << "raw data size = "  << sound_data->raw_data().size << " bytes" << std::endl;
 
         LNet::Package package;
+
+        Package_Header header;
+        header.command_type = Command_Type::Sound_Data;
+
+        package.append_header(header);
         package.append_data(sound_data->raw_data().data, sound_data->raw_data().size);
 
         bool sent = client_socket.send(package);
