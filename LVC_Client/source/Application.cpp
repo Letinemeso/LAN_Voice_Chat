@@ -1,9 +1,8 @@
 #include <Application.h>
 
-#include <thread>
-#include <chrono>
+#include <Stuff/File.h>
 
-#include <LV_Registration.h>
+#include <MDL_Reader.h>
 
 #include <Sound_Engine.h>
 #include <Devices/Input_Device.h>
@@ -17,20 +16,19 @@
 #include <Package_Header.h>
 #include <Recorder.h>
 #include <Player.h>
+#include <Settings.h>
 
 using namespace LVC;
 
 
 Application::Application()
 {
+    LV::Type_Manager::register_basic_types();
+
     LSound::Sound_Engine::instance();
     LNet::Net_Engine::instance();
 
     L_CREATE_LOG_LEVEL(LNet::Net_Engine::instance().log_level());
-
-    M_register_messages();
-    M_register_types();
-    M_on_components_initialized();
 }
 
 Application::~Application()
@@ -40,26 +38,18 @@ Application::~Application()
 
 
 
-void Application::M_register_messages()
-{
-
-}
-
-void Application::M_register_types()
-{
-
-}
-
-void Application::M_on_components_initialized()
-{
-
-}
-
-
-
 void Application::run()
 {
-    LSound::Sound_Engine::instance().set_listener_volume_multiplier(30.0f);
+    Settings settings;
+
+    if(LST::File("Settings.mdl").exists())
+    {
+        LV::MDL_Reader reader;
+        reader.parse_file("Settings");
+        settings.assign_values(reader.get_stub("Settings"));
+    }
+
+    LSound::Sound_Engine::instance().set_listener_volume_multiplier(settings.volume);
 
     Recorder recorder;
     recorder.inject_network_manager(&m_network_manager);
@@ -67,8 +57,7 @@ void Application::run()
     Player player;
 
     m_network_manager.inject_player(&player);
-    // m_network_manager.set_server_ip("127.0.0.1");
-    m_network_manager.set_server_ip("192.168.1.105");
+    m_network_manager.set_server_ip(settings.server_ip);
 
     while(true)
     {

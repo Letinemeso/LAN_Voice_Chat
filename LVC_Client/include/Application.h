@@ -18,11 +18,6 @@ namespace LVC
         Application();
         ~Application();
 
-    private:
-        void M_register_messages();
-        void M_register_types();
-        void M_on_components_initialized();
-
     public:
         void run();
 
