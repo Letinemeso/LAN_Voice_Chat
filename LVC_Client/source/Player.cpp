@@ -59,11 +59,12 @@ Player::~Player()
 
 void Player::add_data(const LNet::Package& _voice_package)
 {
-    L_DEBUG_FUNC_NOARG([&]()
-    {
-        Package_Header header = _voice_package.parse_header<Package_Header>();
-        L_ASSERT(header.command_type == Command_Type::Sound_Data);
-    });
+    Package_Header header = _voice_package.parse_header<Package_Header>();
+    L_ASSERT(header.command_type == Command_Type::Sound_Data);
+
+    unsigned int timestamp = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::system_clock::now().time_since_epoch() ).count();
+    if(timestamp - header.timestamp > Max_Delay_Ms)
+        return;
 
     unsigned int size_without_header = _voice_package.raw_data_size_without_header<Package_Header>();
     L_ASSERT(size_without_header > 0);

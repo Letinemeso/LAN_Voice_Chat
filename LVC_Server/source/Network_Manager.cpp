@@ -1,5 +1,7 @@
 #include <Network_Manager.h>
 
+#include <chrono>
+
 #include <Package_Header.h>
 
 using namespace LVC;
@@ -24,10 +26,18 @@ void Network_Manager::M_respond_to_handshake(const LNet::IP_Address& _respond_to
 
 void Network_Manager::M_respond_to_voice(const LNet::IP_Address& _respond_to, const LNet::Package& _package)
 {
+    Package_Header header;
+    header.command_type = Command_Type::Sound_Data;
+    header.timestamp = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::system_clock::now().time_since_epoch() ).count();
+
+    LNet::Package package;
+    package.append_header(header);
+    package.append_data(_package.raw_data_without_header<Package_Header>(), _package.raw_data_size_without_header<Package_Header>());
+
     m_client_manager.process_for_all([&](const LNet::IP_Address& _address)
     {
-        m_socket.send(_package, _address);
-    }, _respond_to.address_str());
+        m_socket.send(package, _address);
+    }/*, _respond_to.address_str()*/);
 }
 
 

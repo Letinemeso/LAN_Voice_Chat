@@ -15,6 +15,7 @@ namespace LVC
     struct Package_Header
     {
         Command_Type command_type = Command_Type::Unknown;
+        long unsigned int timestamp = 0;
     };
 
 }
