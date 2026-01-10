@@ -67,14 +67,6 @@ void Network_Manager::process()
 
         M_process_package(package);
     }
-
-    Package_Header header;
-    header.command_type = Command_Type::Unknown;
-
-    LNet::Package package;
-    package.append_header(header);
-
-    m_socket.send(package);
 }
 
 
