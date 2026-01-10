@@ -18,14 +18,16 @@ Network_Manager::~Network_Manager()
 
 void Network_Manager::M_respond_to_handshake(const LNet::IP_Address& _respond_to, const LNet::Package& _package)
 {
-    std::cout << "client shake it shake it!" << std::endl;
+    std::cout << "client " << _respond_to.address_str() << " shake it shake it!" << std::endl;
     m_socket.send(_package, _respond_to);
 }
 
 void Network_Manager::M_respond_to_voice(const LNet::IP_Address& _respond_to, const LNet::Package& _package)
 {
-    std::cout << "client has farted" << std::endl;
-    m_socket.send(_package, _respond_to);
+    m_client_manager.process_for_all([&](const LNet::IP_Address& _address)
+    {
+        m_socket.send(_package, _address);
+    }, _respond_to.address_str());
 }
 
 
