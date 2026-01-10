@@ -7,7 +7,7 @@ using namespace LVC;
 
 Network_Manager::Network_Manager()
 {
-    m_socket.set_listen_timeout_ms(250);
+    m_socket.set_listen_timeout_ms(1);
 }
 
 Network_Manager::~Network_Manager()
