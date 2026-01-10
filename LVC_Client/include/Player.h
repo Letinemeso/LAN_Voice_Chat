@@ -21,9 +21,6 @@ namespace LVC
     private:
         LDS::List<Sound_Data> m_active_sounds;
 
-        LSound::Sound* m_sound_0 = new LSound::Sound;
-        LSound::Sound* m_sound_1 = new LSound::Sound;
-
     public:
         Player();
         ~Player();

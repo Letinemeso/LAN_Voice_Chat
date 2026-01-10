@@ -81,7 +81,7 @@ void Player::M_process_fade_out(Sound_Data& _sound_data)
     if(!_sound_data.sound->is_playing())
         return;
 
-    constexpr float Fade_Out_Start_Ratio = 0.9f;
+    constexpr float Fade_Out_Start_Ratio = 0.95f;
     constexpr float Fade_Out_Ratio_Left = 1.0f - Fade_Out_Start_Ratio;
 
     unsigned int timestamp = current_timestamp();
@@ -96,6 +96,9 @@ void Player::M_process_fade_out(Sound_Data& _sound_data)
         return;
 
     float volume = 1.0f - (ratio_left / Fade_Out_Ratio_Left);
+
+    if(volume < 0.0f)
+        volume = 0.0f;
 
     _sound_data.sound->settings().volume = volume;
     _sound_data.sound->apply_settings();
