@@ -4,8 +4,15 @@
 
 #include <Common_Constants.h>
 #include <Package_Header.h>
+#include <Utility.h>
 
 using namespace LVC;
+
+namespace LVC
+{
+    constexpr float Package_Play_Speed_Multiplier = 0.9f;
+    constexpr float Expected_Package_Duration_Ms = (float)Voice_Package_Duration_Ms / Package_Play_Speed_Multiplier;
+}
 
 
 Player::Player()
@@ -33,7 +40,7 @@ void Player::add_data(const LNet::Package& _voice_package)
     Package_Header header = _voice_package.parse_header<Package_Header>();
     L_ASSERT(header.command_type == Command_Type::Sound_Data);
 
-    unsigned int timestamp = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::system_clock::now().time_since_epoch() ).count();
+    unsigned int timestamp = current_timestamp();
     if(timestamp - header.timestamp > Max_Delay_Ms)
         return;
 
@@ -59,9 +66,39 @@ void Player::add_data(const LNet::Package& _voice_package)
 
     sound_data.sound = new LSound::Sound;
     sound_data.sound->set_sound_data(sound_data.data);
+    sound_data.sound->settings().play_speed = Package_Play_Speed_Multiplier;
     sound_data.sound->play();
 
+    sound_data.start_timestamp = current_timestamp();
+
     m_active_sounds.push_back(sound_data);
+}
+
+
+
+void Player::M_process_fade_out(Sound_Data& _sound_data)
+{
+    if(!_sound_data.sound->is_playing())
+        return;
+
+    constexpr float Fade_Out_Start_Ratio = 0.9f;
+    constexpr float Fade_Out_Ratio_Left = 1.0f - Fade_Out_Start_Ratio;
+
+    unsigned int timestamp = current_timestamp();
+    unsigned int ms_passed = timestamp - _sound_data.start_timestamp;
+
+    float passed_ratio = (float)ms_passed / Expected_Package_Duration_Ms;
+    if(passed_ratio < Fade_Out_Start_Ratio)
+        return;
+
+    float ratio_left = passed_ratio - Fade_Out_Start_Ratio;
+    if(ratio_left < 0.0f)
+        return;
+
+    float volume = 1.0f - (ratio_left / Fade_Out_Ratio_Left);
+
+    _sound_data.sound->settings().volume = volume;
+    _sound_data.sound->apply_settings();
 }
 
 
@@ -72,6 +109,8 @@ void Player::process()
     while(!it.end_reached())
     {
         Sound_Data& data = *it;
+
+        M_process_fade_out(data);
 
         if(data.sound->is_playing())
             ++it;

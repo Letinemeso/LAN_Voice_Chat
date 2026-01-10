@@ -15,6 +15,7 @@ namespace LVC
         {
             LSound::Sound_Data* data = nullptr;
             LSound::Sound* sound = nullptr;
+            unsigned int start_timestamp = 0;
         };
 
     private:
@@ -29,6 +30,9 @@ namespace LVC
 
     public:
         void add_data(const LNet::Package& _voice_package);
+
+    private:
+        void M_process_fade_out(Sound_Data& _sound_data);
 
     public:
         void process();

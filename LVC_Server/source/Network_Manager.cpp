@@ -1,7 +1,6 @@
 #include <Network_Manager.h>
 
-#include <chrono>
-
+#include <Utility.h>
 #include <Package_Header.h>
 
 using namespace LVC;
@@ -28,7 +27,7 @@ void Network_Manager::M_respond_to_voice(const LNet::IP_Address& _respond_to, co
 {
     Package_Header header;
     header.command_type = Command_Type::Sound_Data;
-    header.timestamp = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::system_clock::now().time_since_epoch() ).count();
+    header.timestamp = current_timestamp();
 
     LNet::Package package;
     package.append_header(header);
