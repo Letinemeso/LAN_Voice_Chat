@@ -21,8 +21,6 @@ using namespace LVC;
 
 Application::Application()
 {
-    LV::register_types(m_object_constructor);
-
     LSound::Sound_Engine::instance();
     LNet::Net_Engine::instance();
 
@@ -59,7 +57,7 @@ void Application::M_on_components_initialized()
 
 void Application::run()
 {
-    constexpr unsigned int Duration_Milliseconds = 500;
+    /*constexpr unsigned int Duration_Milliseconds = 500;
 
     LSound::Input_Device_Settings device_settings = LSound::Input_Device_Settings::voip_standard((float)Duration_Milliseconds * 0.001f);
     LSound::Input_Device input_device(device_settings);
@@ -133,5 +131,12 @@ void Application::run()
             continue;
 
         std::cout << "error sending package" << std::endl;
+    } */
+
+    m_network_manager.set_server_ip("127.0.0.1");
+
+    while(true)
+    {
+        m_network_manager.process();
     }
 }
