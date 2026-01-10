@@ -76,3 +76,9 @@ void Network_Manager::process()
 
     m_socket.send(package);
 }
+
+
+void Network_Manager::send_package(const LNet::Package& _package)
+{
+    m_socket.send(_package);
+}

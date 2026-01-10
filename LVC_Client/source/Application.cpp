@@ -15,6 +15,7 @@
 
 #include <Common_Constants.h>
 #include <Package_Header.h>
+#include <Recorder.h>
 
 using namespace LVC;
 
@@ -133,10 +134,14 @@ void Application::run()
         std::cout << "error sending package" << std::endl;
     } */
 
+    Recorder recorder;
+    recorder.inject_network_manager(&m_network_manager);
+
     m_network_manager.set_server_ip("127.0.0.1");
 
     while(true)
     {
+        recorder.process();
         m_network_manager.process();
     }
 }

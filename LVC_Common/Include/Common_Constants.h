@@ -10,4 +10,6 @@ namespace LVC
 
     constexpr float Client_Existence_Duration = 2.0f;
 
+    constexpr float Voice_Package_Duration = 0.05f;
+
 }

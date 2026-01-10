@@ -28,6 +28,8 @@ namespace LVC
         void connect();
         void process();
 
+        void send_package(const LNet::Package& _package);
+
     };
 
 }
