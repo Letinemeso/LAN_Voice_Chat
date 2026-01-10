@@ -114,8 +114,14 @@ void Player::process()
         M_process_fade_out(data);
 
         if(data.sound->is_playing())
+        {
             ++it;
-        else
-            it = m_active_sounds.erase_and_iterate_forward(it);
+            continue;
+        }
+
+        delete data.data;
+        delete data.sound;
+
+        it = m_active_sounds.erase_and_iterate_forward(it);
     }
 }
