@@ -16,6 +16,17 @@ Client_Manager::Clients_List::Iterator Client_Manager::M_find_client_it(const st
     return {};
 }
 
+Client_Manager::Clients_List::Const_Iterator Client_Manager::M_find_client_it(const std::string& _address) const
+{
+    for(Clients_List::Const_Iterator it = m_clients.begin(); !it.end_reached(); ++it)
+    {
+        if(it->address.address_str() == _address)
+            return it;
+    }
+
+    return {};
+}
+
 
 
 void Client_Manager::remember_client(const LNet::IP_Address& _address)
@@ -58,5 +69,59 @@ void Client_Manager::process()
             it = m_clients.erase_and_iterate_forward(it);
         else
             ++it;
+    }
+}
+
+
+
+void Client_Manager::process_for_client(const Process_Function& _func, const std::string& _address) const
+{
+    L_ASSERT(_func);
+
+    Clients_List::Const_Iterator maybe_client = M_find_client_it(_address);
+    if(!maybe_client.is_ok())
+        return;
+
+    _func(maybe_client->address);
+}
+
+void Client_Manager::process_for_all(const Process_Function& _func) const
+{
+    L_ASSERT(_func);
+
+    for(Clients_List::Const_Iterator it = m_clients.begin(); !it.end_reached(); ++it)
+    {
+        const Client_Data& client = *it;
+        _func(client.address);
+    }
+}
+
+void Client_Manager::process_for_all(const Process_Function& _func, const std::string& _exclude) const
+{
+    L_ASSERT(_func);
+
+    for(Clients_List::Const_Iterator it = m_clients.begin(); !it.end_reached(); ++it)
+    {
+        const Client_Data& client = *it;
+
+        if(client.address.address_str() == _exclude)
+            continue;
+
+        _func(client.address);
+    }
+}
+
+void Client_Manager::process_for_all(const Process_Function& _func, const LDS::Vector<std::string>& _exclude) const
+{
+    L_ASSERT(_func);
+
+    for(Clients_List::Const_Iterator it = m_clients.begin(); !it.end_reached(); ++it)
+    {
+        const Client_Data& client = *it;
+
+        if(_exclude.find(client.address.address_str()).is_ok())
+            continue;
+
+        _func(client.address);
     }
 }
