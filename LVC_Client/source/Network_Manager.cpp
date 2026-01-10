@@ -8,9 +8,22 @@
 using namespace LVC;
 
 
+void Network_Manager::M_process_package__voice(const LNet::Package& _package)
+{
+    L_ASSERT(m_packages_queue);
+
+    m_packages_queue->add_data(_package);
+}
+
+
 void Network_Manager::M_process_package(const LNet::Package& _package)
 {
+    Package_Header header = _package.parse_header<Package_Header>();
 
+    if(header.command_type == Command_Type::Sound_Data)
+        M_process_package__voice(_package);
+    else
+        std::cout << "got some shit" << std::endl;
 }
 
 

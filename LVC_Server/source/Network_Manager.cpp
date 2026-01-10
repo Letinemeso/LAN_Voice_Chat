@@ -22,6 +22,12 @@ void Network_Manager::M_respond_to_handshake(const LNet::IP_Address& _respond_to
     m_socket.send(_package, _respond_to);
 }
 
+void Network_Manager::M_respond_to_voice(const LNet::IP_Address& _respond_to, const LNet::Package& _package)
+{
+    std::cout << "client has farted" << std::endl;
+    m_socket.send(_package, _respond_to);
+}
+
 
 
 void Network_Manager::process()
@@ -38,7 +44,7 @@ void Network_Manager::process()
     if(header.command_type == Command_Type::Handshake)
         M_respond_to_handshake(message.client_address, message.package);
     else if(header.command_type == Command_Type::Sound_Data)
-        std::cout << "client has farted" << std::endl;
+        M_respond_to_voice(message.client_address, message.package);
     else
         std::cout << "mystery..." << std::endl;
 }
