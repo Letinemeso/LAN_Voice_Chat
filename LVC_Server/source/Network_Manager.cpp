@@ -20,6 +20,7 @@ Network_Manager::~Network_Manager()
 void Network_Manager::M_respond_to_handshake(const LNet::IP_Address& _respond_to, const LNet::Package& _package)
 {
     std::cout << "client " << _respond_to.address_str() << " shake it shake it!" << std::endl;
+    m_client_manager.remember_client(_respond_to);
     m_socket.send(_package, _respond_to);
 }
 
@@ -48,8 +49,6 @@ void Network_Manager::process()
     LNet::Server_Socket::Message message = m_socket.receive();
     if(message.package.raw_data_size() == 0)
         return;
-
-    m_client_manager.remember_client(message.client_address);
 
     Package_Header header = message.package.parse_header<Package_Header>();
     if(header.command_type == Command_Type::Handshake)

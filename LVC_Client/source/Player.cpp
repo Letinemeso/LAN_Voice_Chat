@@ -10,7 +10,8 @@ using namespace LVC;
 
 namespace LVC
 {
-    constexpr float Package_Play_Speed_Multiplier = 0.9f;
+    // constexpr float Package_Play_Speed_Multiplier = 0.9f;
+    constexpr float Package_Play_Speed_Multiplier = 1.0f;
     constexpr float Expected_Package_Duration_Ms = (float)Voice_Package_Duration_Ms / Package_Play_Speed_Multiplier;
 }
 
