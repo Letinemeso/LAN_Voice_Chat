@@ -38,12 +38,11 @@ Player::~Player()
 
 void Player::add_data(const LNet::Package& _voice_package)
 {
-    Package_Header header = _voice_package.parse_header<Package_Header>();
-    L_ASSERT(header.command_type == Command_Type::Sound_Data);
-
-    unsigned int timestamp = current_timestamp();
-    if(timestamp - header.timestamp > Max_Delay_Ms)
-        return;
+    L_DEBUG_FUNC_NOARG([&]()
+    {
+        Package_Header header = _voice_package.parse_header<Package_Header>();
+        L_ASSERT(header.command_type == Command_Type::Sound_Data);
+    });
 
     unsigned int size_without_header = _voice_package.raw_data_size_without_header<Package_Header>();
     L_ASSERT(size_without_header > 0);

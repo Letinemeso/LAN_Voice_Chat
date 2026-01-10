@@ -11,8 +11,7 @@ namespace LVC
     constexpr float Client_Existence_Duration = 2.0f;
     constexpr float Client_Heartbeat_Frequency = Client_Existence_Duration * 0.45f;
 
-    constexpr float Voice_Package_Duration = 0.15f;
+    constexpr float Voice_Package_Duration = 0.25f;
     constexpr unsigned int Voice_Package_Duration_Ms = Voice_Package_Duration * 1000.0f;
-    constexpr unsigned int Max_Delay_Ms = 20;
 
 }
