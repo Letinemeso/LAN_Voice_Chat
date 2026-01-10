@@ -33,6 +33,8 @@ namespace LVC
         Clients_List::Const_Iterator M_find_client_it(const std::string& _address) const;
 
     public:
+        bool client_is_registered(const LNet::IP_Address& _address) const;
+
         void remember_client(const LNet::IP_Address& _address);
         void forget_client(const std::string& _address);
 

@@ -29,6 +29,13 @@ Client_Manager::Clients_List::Const_Iterator Client_Manager::M_find_client_it(co
 
 
 
+bool Client_Manager::client_is_registered(const LNet::IP_Address& _address) const
+{
+    Clients_List::Const_Iterator maybe_client = M_find_client_it(_address.address_str());
+    return maybe_client.is_ok();
+}
+
+
 void Client_Manager::remember_client(const LNet::IP_Address& _address)
 {
     const std::string& address_str = _address.address_str();
@@ -46,6 +53,8 @@ void Client_Manager::remember_client(const LNet::IP_Address& _address)
     data.address = _address;
     data.existence_duration.start();
     m_clients.push_back(data);
+
+    std::cout << "client [" << _address.address_str() << "] registered" << std::endl;
 }
 
 void Client_Manager::forget_client(const std::string& _address)
@@ -54,6 +63,8 @@ void Client_Manager::forget_client(const std::string& _address)
     L_ASSERT(maybe_registred_client.is_ok());
 
     m_clients.erase(maybe_registred_client);
+
+    std::cout << "client [" << _address << "] disconnected" << std::endl;
 }
 
 
@@ -65,10 +76,14 @@ void Client_Manager::process()
     {
         Client_Data& client = *it;
 
-        if(client.existence_duration.duration() >= Client_Existence_Duration)
-            it = m_clients.erase_and_iterate_forward(it);
-        else
+        if(client.existence_duration.duration() < Client_Existence_Duration)
+        {
             ++it;
+            continue;
+        }
+
+        std::cout << "client [" << client.address.address_str() << "] disconnected" << std::endl;
+        it = m_clients.erase_and_iterate_forward(it);
     }
 }
 
