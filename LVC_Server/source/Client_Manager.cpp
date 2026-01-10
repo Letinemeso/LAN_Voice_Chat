@@ -5,25 +5,11 @@
 using namespace LVC;
 
 
-std::string Client_Manager::M_extract_ip_address_string(const sockaddr_in& _address) const
-{
-    char ip_cstr[INET_ADDRSTRLEN];
-    const char* result = inet_ntop(AF_INET, &(_address.sin_addr), ip_cstr, INET_ADDRSTRLEN);
-
-    if(result == nullptr)
-    {
-        std::cout << "error extracting address" << std::endl;
-        return {};
-    }
-
-    return std::string(ip_cstr);
-}
-
 Client_Manager::Clients_List::Iterator Client_Manager::M_find_client_it(const std::string& _address)
 {
     for(Clients_List::Iterator it = m_clients.begin(); !it.end_reached(); ++it)
     {
-        if(it->address_str == _address)
+        if(it->address.address_str() == _address)
             return it;
     }
 
@@ -32,11 +18,9 @@ Client_Manager::Clients_List::Iterator Client_Manager::M_find_client_it(const st
 
 
 
-void Client_Manager::remember_client(const sockaddr_in& _address)
+void Client_Manager::remember_client(const LNet::IP_Address& _address)
 {
-    L_ASSERT(_address.sin_family == AF_INET);
-
-    std::string address_str = M_extract_ip_address_string(_address);
+    const std::string& address_str = _address.address_str();
     if(address_str.size() == 0)
         return;
 
@@ -48,15 +32,9 @@ void Client_Manager::remember_client(const sockaddr_in& _address)
     }
 
     Client_Data data;
-    data.address_str = (std::string&&)address_str;
     data.address = _address;
     data.existence_duration.start();
     m_clients.push_back(data);
-}
-
-void Client_Manager::forget_client(const sockaddr_in& _address)
-{
-    forget_client( M_extract_ip_address_string(_address) );
 }
 
 void Client_Manager::forget_client(const std::string& _address)

@@ -20,6 +20,9 @@ namespace LVC
         Network_Manager();
         ~Network_Manager();
 
+    private:
+        void M_respond_to_handshake(const LNet::IP_Address& _respond_to, const LNet::Package& _package);
+
     public:
         void process();
 
