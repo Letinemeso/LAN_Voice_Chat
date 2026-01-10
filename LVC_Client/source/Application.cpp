@@ -16,7 +16,6 @@
 #include <Common_Constants.h>
 #include <Package_Header.h>
 #include <Recorder.h>
-#include <Voice_Package_Queue.h>
 #include <Player.h>
 
 using namespace LVC;
@@ -139,12 +138,9 @@ void Application::run()
     Recorder recorder;
     recorder.inject_network_manager(&m_network_manager);
 
-    Voice_Package_Queue packages_queue;
-
     Player player;
-    player.inject_packages_queue(&packages_queue);
 
-    m_network_manager.inject_packages_queue(&packages_queue);
+    m_network_manager.inject_player(&player);
     m_network_manager.set_server_ip("127.0.0.1");
 
     while(true)

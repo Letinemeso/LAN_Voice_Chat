@@ -10,9 +10,7 @@ using namespace LVC;
 
 void Network_Manager::M_process_package__voice(const LNet::Package& _package)
 {
-    L_ASSERT(m_packages_queue);
-
-    m_packages_queue->add_data(_package);
+    m_player->add_data(_package);
 }
 
 

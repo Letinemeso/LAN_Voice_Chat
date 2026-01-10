@@ -2,7 +2,7 @@
 
 #include <Sound.h>
 
-#include <Voice_Package_Queue.h>
+#include <Package.h>
 
 
 namespace LVC
@@ -11,21 +11,24 @@ namespace LVC
     class Player
     {
     private:
-        Voice_Package_Queue* m_packages_queue = nullptr;
+        struct Sound_Data
+        {
+            LSound::Sound_Data* data = nullptr;
+            LSound::Sound* sound = nullptr;
+        };
 
-        LSound::Sound_Data* m_sound_data = nullptr;
-        LSound::Sound m_sound;
+    private:
+        LDS::List<Sound_Data> m_active_sounds;
+
+        LSound::Sound* m_sound_0 = new LSound::Sound;
+        LSound::Sound* m_sound_1 = new LSound::Sound;
 
     public:
         Player();
         ~Player();
 
     public:
-        inline void inject_packages_queue(Voice_Package_Queue* _ptr) { m_packages_queue = _ptr; }
-
-    private:
-        void M_on_sound_end();
-        void M_start_next_sound_if_needed();
+        void add_data(const LNet::Package& _voice_package);
 
     public:
         void process();

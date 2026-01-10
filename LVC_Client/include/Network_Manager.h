@@ -3,7 +3,7 @@
 #include <Client_Socket.h>
 
 #include <Common_Constants.h>
-#include <Voice_Package_Queue.h>
+#include <Player.h>
 
 
 namespace LVC
@@ -17,10 +17,10 @@ namespace LVC
         bool m_is_connected = false;
         std::string m_server_ip;
 
-        Voice_Package_Queue* m_packages_queue = nullptr;
+        Player* m_player = nullptr;
 
     public:
-        inline void inject_packages_queue(Voice_Package_Queue* _ptr) { m_packages_queue = _ptr; }
+        inline void inject_player(Player* _ptr) { m_player = _ptr; }
 
         inline void set_server_ip(const std::string& _value) { m_server_ip = _value; }
 
